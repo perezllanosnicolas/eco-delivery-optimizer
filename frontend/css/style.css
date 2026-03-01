@@ -62,7 +62,7 @@ header nav a {
 
 /* HERO SECTION */
 .hero-bg {
-    background: url('fondo.jpg') center/cover no-repeat;
+    background: url('../assets/fondo.jpg') center/cover no-repeat;
 }
 
 .hero {

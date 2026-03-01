@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Detalle de envío – DHL EcoPoints</title>
-  <link rel="stylesheet" href="styles-envio.css" />
+  <link rel="stylesheet" href="../css/styles-envio.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
   <!-- Resultados pre-generados por el algoritmo Java -->
-  <script src="eco-resultados.js"></script>
+  <script src="../js/eco-resultados.js"></script>
   <!-- Salida del optimizador (ubicaciones + fechas con EcoPoints) -->
-  <script src="eco-opciones.js"></script>
+  <script src="../js/eco-opciones.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;600;800;900&display=swap" rel="stylesheet"/>
 
   <style>
@@ -504,7 +504,7 @@
     }
 
     // ── Construir filas de ubicación desde ECO_OPCIONES.ubicacionesTopPuntos ──
-    (function () {
+    function inicializarEnvioEco() {
       const container = document.getElementById('loc-rows-algo');
       const data      = ECO_OPCIONES.ubicacionesTopPuntos;
       const maxGlobal = Math.max(...Object.values(data));
@@ -547,8 +547,11 @@
         row.addEventListener('click', () => selectLoc(row));
         container.appendChild(row);
       });
-    })();
 
+      // Asegurarnos de que el slider de distancia funcione con los nuevos datos
+      onRadiusChange(document.getElementById('radius-slider'));
+    }
+    
     // ── State ─────────────────────────────────────────────────
     let selNombre = null, selLocLabel = null, selEco = null;
     let selDays = null, selOp = null;

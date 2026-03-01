@@ -15,7 +15,7 @@ public class ServidorAPI {
 
         System.out.println("🚀 Servidor DHL EcoPuntos iniciado en http://localhost:7070");
 
-        /* 
+        
         // 2. Creamos el Endpoint principal que llamará la web
         app.get("/api/v1/eco-opciones", ctx -> {
             
@@ -55,7 +55,7 @@ public class ServidorAPI {
             ctx.json(respuestaJson);
         });
     
-        
+        /* 
         //3. Creamos el Endpoint para el Empresario
       // NUEVO ENDPOINT PARA EL PANEL B2B (EMPRESAS)
         app.get("/api/v1/dashboard-stats", ctx -> {

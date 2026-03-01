@@ -193,89 +193,98 @@ body{background:var(--dark);color:var(--txt);font-family:'DM Sans',sans-serif;di
   </div>
 </div>
 
-<script src="dashboard-stats.js"></script>
+<script src="../js/dashboard-stats.js"></script>
 
 <script>
-
 /* ═══════════════════════════════════════════
-   BUSINESS PAGE
+   BUSINESS PAGE (Conectado al Backend Java)
 ═══════════════════════════════════════════ */
 let currentScenario='week';
 let charts={};
+let SCENARIOS={};
+let DASHBOARD_STATS = null; // Variable global para guardar los datos
 
-// ── Build SCENARIOS from real dashboard-stats.js data (con histórico) ──
-const _wk=DASHBOARD_STATS;
-const _wkDays=7;
-const _wkCo2L=_wk.graficos.emisionesDiarias.acumuladoActual.slice(-1)[0]; // 84
-const _wkCo2R=_wk.graficos.emisionesDiarias.acumuladoEco.slice(-1)[0];    // 36
-const _wkCostL=_wk.kpis.costeActual;  // 420
-const _wkCostR=_wk.kpis.costeEco;     // 163.8
+// ── ESTA ES LA FUNCIÓN QUE ESPERA dashboard-stats.js ──
+function pintarGraficos(datosBackend) {
+  DASHBOARD_STATS = datosBackend; // Guardamos la respuesta de Java
 
-// Proyecciones reales del algoritmo
-const _hM=_wk.historicoProyecciones.find(h=>h.periodo==='1 Mes');
-const _hY=_wk.historicoProyecciones.find(h=>h.periodo==='1 Año');
+  // ── Construir escenarios con los datos reales ──
+  const _wk=DASHBOARD_STATS;
+  const _wkDays=7;
+  const _wkCo2L=_wk.graficos.emisionesDiarias.acumuladoActual.slice(-1)[0]; 
+  const _wkCo2R=_wk.graficos.emisionesDiarias.acumuladoEco.slice(-1)[0];    
+  const _wkCostL=_wk.kpis.costeActual;  
+  const _wkCostR=_wk.kpis.costeEco;     
 
-// Mes: coste total derivado del ritmo diario real + ahorro real del algoritmo
-const _mCostL=Math.round((_wkCostL/_wkDays)*_hM.dias);          // 1800
-const _mCostR=Math.round(_mCostL-_hM.ahorroEuros);               // 702
-const _mCo2L =Math.round((_wkCo2L/_wkDays)*_hM.dias);           // 360
-const _mCo2R =Math.round(_mCo2L-_hM.co2EvitadoKg);              // 206
-const _mRoutesL=Math.round((_wk.graficos.rutasLanzadas.sinEco/_wkDays)*_hM.dias); // 30
-const _mRoutesR=Math.round((_wk.graficos.rutasLanzadas.conEco/_wkDays)*_hM.dias); // 13
+  // Proyecciones reales del algoritmo de Java
+  const _hM=_wk.historicoProyecciones.find(h=>h.periodo==='1 Mes');
+  const _hY=_wk.historicoProyecciones.find(h=>h.periodo==='1 Año');
 
-// Año: ídem con datos reales anuales del algoritmo
-const _yCostL=Math.round((_wkCostL/_wkDays)*_hY.dias);           // 21900
-const _yCostR=Math.round(_yCostL-_hY.ahorroEuros);               // 8895
-const _yCo2L =Math.round((_wkCo2L/_wkDays)*_hY.dias);           // 4380
-const _yCo2R =Math.round(_yCo2L-_hY.co2EvitadoKg);              // 2393
-const _yRoutesL=Math.round((_wk.graficos.rutasLanzadas.sinEco/_wkDays)*_hY.dias); // 365
-const _yRoutesR=Math.round((_wk.graficos.rutasLanzadas.conEco/_wkDays)*_hY.dias); // 157
+  // Mes: coste total derivado del ritmo diario real + ahorro real del algoritmo
+  const _mCostL=Math.round((_wkCostL/_wkDays)*_hM.dias);          
+  const _mCostR=Math.round(_mCostL-_hM.ahorroEuros);               
+  const _mCo2L =Math.round((_wkCo2L/_wkDays)*_hM.dias);           
+  const _mCo2R =Math.round(_mCo2L-_hM.co2EvitadoKg);              
+  const _mRoutesL=Math.round((_wk.graficos.rutasLanzadas.sinEco/_wkDays)*_hM.dias); 
+  const _mRoutesR=Math.round((_wk.graficos.rutasLanzadas.conEco/_wkDays)*_hM.dias); 
 
-const SCENARIOS={
-  week:{
-    label:'1 semana · 1 zona', mult:1,
-    paquetes:_wk.historicoProyecciones.find(h=>h.periodo==='1 Semana').paquetesOptimizados,
-    routesL:_wk.graficos.rutasLanzadas.sinEco,
-    routesR:_wk.graficos.rutasLanzadas.conEco,
-    co2L:_wkCo2L, co2R:_wkCo2R,
-    costL:_wkCostL, costR:_wkCostR,
-    fillL:_wk.kpis.porcentajeOcupacionSinEco,
-    fillR:_wk.kpis.porcentajeOcupacionConEco,
-    days:_wk.graficos.emisionesDiarias.dias,
-    co2ByDayL:_wk.graficos.emisionesDiarias.acumuladoActual,
-    co2ByDayR:_wk.graficos.emisionesDiarias.acumuladoEco,
-    costByDayL:_wk.graficos.costeDiario.acumuladoActual,
-    costByDayR:_wk.graficos.costeDiario.acumuladoEco,
-  },
-  month:{
-    label:'1 mes · 1 zona', mult:_hM.dias/_wkDays,
-    paquetes:_hM.paquetesOptimizados,
-    routesL:_mRoutesL, routesR:_mRoutesR,
-    co2L:_mCo2L, co2R:_mCo2R,
-    costL:_mCostL, costR:_mCostR,
-    fillL:_wk.kpis.porcentajeOcupacionSinEco,
-    fillR:_wk.kpis.porcentajeOcupacionConEco,
-    days:['S1','S2','S3','S4'],
-    co2ByDayL:[_mCo2L/4,_mCo2L/2,_mCo2L*3/4,_mCo2L].map(Math.round),
-    co2ByDayR:[_mCo2R/4,_mCo2R/2,_mCo2R*3/4,_mCo2R].map(Math.round),
-    costByDayL:[_mCostL/4,_mCostL/2,_mCostL*3/4,_mCostL].map(Math.round),
-    costByDayR:[_mCostR/4,_mCostR/2,_mCostR*3/4,_mCostR].map(Math.round),
-  },
-  year:{
-    label:'1 año · 1 zona', mult:_hY.dias/_wkDays,
-    paquetes:_hY.paquetesOptimizados,
-    routesL:_yRoutesL, routesR:_yRoutesR,
-    co2L:_yCo2L, co2R:_yCo2R,
-    costL:_yCostL, costR:_yCostR,
-    fillL:_wk.kpis.porcentajeOcupacionSinEco,
-    fillR:_wk.kpis.porcentajeOcupacionConEco,
-    days:['T1','T2','T3','T4'],
-    co2ByDayL:[_yCo2L/4,_yCo2L/2,_yCo2L*3/4,_yCo2L].map(Math.round),
-    co2ByDayR:[_yCo2R/4,_yCo2R/2,_yCo2R*3/4,_yCo2R].map(Math.round),
-    costByDayL:[_yCostL/4,_yCostL/2,_yCostL*3/4,_yCostL].map(Math.round),
-    costByDayR:[_yCostR/4,_yCostR/2,_yCostR*3/4,_yCostR].map(Math.round),
-  }
-};
+  // Año: ídem con datos reales anuales del algoritmo
+  const _yCostL=Math.round((_wkCostL/_wkDays)*_hY.dias);           
+  const _yCostR=Math.round(_yCostL-_hY.ahorroEuros);               
+  const _yCo2L =Math.round((_wkCo2L/_wkDays)*_hY.dias);           
+  const _yCo2R =Math.round(_yCo2L-_hY.co2EvitadoKg);              
+  const _yRoutesL=Math.round((_wk.graficos.rutasLanzadas.sinEco/_wkDays)*_hY.dias); 
+  const _yRoutesR=Math.round((_wk.graficos.rutasLanzadas.conEco/_wkDays)*_hY.dias); 
+
+  SCENARIOS={
+    week:{
+      label:'1 semana · 1 zona', mult:1,
+      paquetes:_wk.historicoProyecciones.find(h=>h.periodo==='1 Semana').paquetesOptimizados,
+      routesL:_wk.graficos.rutasLanzadas.sinEco,
+      routesR:_wk.graficos.rutasLanzadas.conEco,
+      co2L:_wkCo2L, co2R:_wkCo2R,
+      costL:_wkCostL, costR:_wkCostR,
+      fillL:_wk.kpis.porcentajeOcupacionSinEco,
+      fillR:_wk.kpis.porcentajeOcupacionConEco,
+      days:_wk.graficos.emisionesDiarias.dias,
+      co2ByDayL:_wk.graficos.emisionesDiarias.acumuladoActual,
+      co2ByDayR:_wk.graficos.emisionesDiarias.acumuladoEco,
+      costByDayL:_wk.graficos.costeDiario.acumuladoActual,
+      costByDayR:_wk.graficos.costeDiario.acumuladoEco,
+    },
+    month:{
+      label:'1 mes · 1 zona', mult:_hM.dias/_wkDays,
+      paquetes:_hM.paquetesOptimizados,
+      routesL:_mRoutesL, routesR:_mRoutesR,
+      co2L:_mCo2L, co2R:_mCo2R,
+      costL:_mCostL, costR:_mCostR,
+      fillL:_wk.kpis.porcentajeOcupacionSinEco,
+      fillR:_wk.kpis.porcentajeOcupacionConEco,
+      days:['S1','S2','S3','S4'],
+      co2ByDayL:[_mCo2L/4,_mCo2L/2,_mCo2L*3/4,_mCo2L].map(Math.round),
+      co2ByDayR:[_mCo2R/4,_mCo2R/2,_mCo2R*3/4,_mCo2R].map(Math.round),
+      costByDayL:[_mCostL/4,_mCostL/2,_mCostL*3/4,_mCostL].map(Math.round),
+      costByDayR:[_mCostR/4,_mCostR/2,_mCostR*3/4,_mCostR].map(Math.round),
+    },
+    year:{
+      label:'1 año · 1 zona', mult:_hY.dias/_wkDays,
+      paquetes:_hY.paquetesOptimizados,
+      routesL:_yRoutesL, routesR:_yRoutesR,
+      co2L:_yCo2L, co2R:_yCo2R,
+      costL:_yCostL, costR:_yCostR,
+      fillL:_wk.kpis.porcentajeOcupacionSinEco,
+      fillR:_wk.kpis.porcentajeOcupacionConEco,
+      days:['T1','T2','T3','T4'],
+      co2ByDayL:[_yCo2L/4,_yCo2L/2,_yCo2L*3/4,_yCo2L].map(Math.round),
+      co2ByDayR:[_yCo2R/4,_yCo2R/2,_yCo2R*3/4,_yCo2R].map(Math.round),
+      costByDayL:[_yCostL/4,_yCostL/2,_yCostL*3/4,_yCostL].map(Math.round),
+      costByDayR:[_yCostR/4,_yCostR/2,_yCostR*3/4,_yCostR].map(Math.round),
+    }
+  };
+
+  // ¡Ahora sí! Construimos la página usando los datos que ya tenemos
+  buildBizPage('week');
+}
 
 function fmt(n){
   if(n>=1000000)return(n/1000000).toFixed(1)+'M';
@@ -310,7 +319,7 @@ function buildBizPage(key){
   document.getElementById('kpi-fill').textContent=s.fillR+'%';
   document.getElementById('kpi-fill-sub').textContent=`vs ${s.fillL}% sin algoritmo`;
 
-  // ROI table — real data for week, scaled for month/year
+  // ROI table — usamos la global DASHBOARD_STATS
   const _roi=DASHBOARD_STATS.tablaRoi;
   const zones=_roi.map(z=>({
     zona:z.zona,
@@ -421,9 +430,6 @@ function drawCharts(s){
     }
   });
 }
-
-// Init biz page on load
-buildBizPage('week');
 </script>
 </body>
 </html>
