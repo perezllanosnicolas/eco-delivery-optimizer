@@ -1,0 +1,11 @@
+# Excluir compilados de Java y Maven
+backend/target/
+*.class
+
+# Excluir configuraciones de editores (VS Code, IntelliJ, Eclipse)
+.idea/
+.vscode/
+*.iml
+
+# Excluir datos locales de bases de datos
+postgres_data/

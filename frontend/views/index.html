@@ -3,19 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página estilo DHL</title>
+    <title>Inicio – DHL EcoPoints</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
-
 <body>
 
 <header>
     <div><a href="index.html" style="text-decoration:none;"><strong class="logo">HackatonDHL</strong></a></div>
     <nav>
-        <a href="#">Haga seguimiento</a>
-        <a href="#">Enviar</a>
-        <a href="#">Servicios de logística</a>
-        <a href="simulacion.html">Simulación ECO</a>
+        <a href="envio.html">Seguir envío (B2C)</a>
+        <a href="profile.html">Mi Perfil Eco</a>
+        <a href="simulacion.html">Panel de Impacto (B2B)</a>
     </nav>
     <a href="profile.html" class="header-profile">
         <span class="header-avatar">CM</span>
@@ -24,38 +22,45 @@
 </header>
 
 <div class="hero-bg">
-<section class="hero">
-    <h1>Siga su envío</h1>
+    <section class="hero">
+        <h1>Simulador Logístico y EcoPoints</h1>
+        <p style="font-size: 18px; max-width: 600px; margin: 0 auto 30px; line-height: 1.5;">
+            Plataforma de demostración: Optimización de rutas de última milla, reducción de huella de carbono y programa de fidelización sostenible.
+        </p>
+        <div class="track-box">
+            <input type="text" id="tracking" value="ENV-1234567890" readonly style="background: #f0f0f0; color: #555;">
+            <a class="btn" href="envio.html">Seguimiento de Paquete</a>
+        </div>
+    </section>
 
-    <div class="track-box">
-        <input type="text" id="tracking" placeholder="Indica tu(s) número(s) de seguimiento">
-        <a class="btn" href="envio.html">Seguir envío</a>
-    </div>
-</section>
+    <section class="card-section">
+        <div class="card">
+            <h3>🌱 Cliente Final (B2C)</h3>
+            <p>Descubre alternativas de entrega sostenibles y gana EcoPoints.</p>
+            <br>
+            <a class="btn" href="envio.html" style="background:#2e7d32;">Ver Envío</a>
+        </div>
 
-<section class="card-section">
-    <div class="card">
-        <h3>Enviar ahora</h3>
-        <p>Encuentra el servicio adecuado.</p>
-    </div>
+        <div class="card">
+            <h3>🎁 Recompensas</h3>
+            <p>Panel de usuario para canjear EcoPoints por ventajas exclusivas.</p>
+            <br>
+            <a class="btn" href="profile.html" style="background:#FFCC00; color:#000;">Mi Perfil</a>
+        </div>
 
-    <div class="card">
-        <h3>Obtener un presupuesto</h3>
-        <p>Solicita un coste estimado rápido.</p>
-    </div>
-
-    <div class="card">
-        <h3>Cuenta de empresa</h3>
-        <p>Accede a soluciones para negocios.</p>
-    </div>
-</section>
+        <div class="card">
+            <h3>📊 Empresa (B2B)</h3>
+            <p>Dashboard de KPIs financieros y de reducción de emisiones CO₂.</p>
+            <br>
+            <a class="btn" href="simulacion.html" style="background:#1565c0;">Ver Dashboard</a>
+        </div>
+    </section>
 </div>
 
 <section class="news-section">
-    <h2>Novedades actuales</h2>
-    <p>Información y noticias relacionadas.</p>
+    <h2>Proyecto Hackatón DHL 2026</h2>
+    <p>Desarrollado para optimizar la logística de última milla mediante algoritmos e incentivos.</p>
 </section>
-
 
 </body>
 </html>

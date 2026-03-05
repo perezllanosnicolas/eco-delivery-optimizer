@@ -1,6 +1,6 @@
 // ============================================================
 //  eco-resultados.js
-//  Resultados PRE-GENERADOS por OptimizadorEcoPuntosFinal.java
+//  Resultados PRE-GENERADOS por OptimizadorService.java
 //  Zona postal: 28931 · Fecha base: 25/02/2026
 //  Configuración: 7 días vista · 3 puntos de recogida · 100 domicilios
 //  Parámetros del modelo:

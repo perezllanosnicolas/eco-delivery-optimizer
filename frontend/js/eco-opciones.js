@@ -3,14 +3,14 @@ let ECO_OPCIONES = null;
 
 async function cargarOpcionesEco() {
     try {
-        // Hacemos la petición a tu API recién descomentada
+        // Hacemos la petición a tu API  
         const respuesta = await fetch('http://localhost:7070/api/v1/eco-opciones');
         
         if (!respuesta.ok) {
             throw new Error('Error en la respuesta del servidor Java');
         }
 
-        // Guardamos los datos reales calculados por tu Optimizador
+        // Guardamos los datos reales calculados por el Optimizador
         ECO_OPCIONES = await respuesta.json();
 
         // Llamamos a la función que pintará las opciones en la web

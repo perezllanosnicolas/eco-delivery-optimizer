@@ -572,7 +572,7 @@
     color: var(--dhl-red);
 }
 
-/* --- New item animation (dynamically added) --- */
+
 .rw-item-new {
     opacity: 0;
     transform: translateY(-12px) scale(0.98);

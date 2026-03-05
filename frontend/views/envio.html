@@ -257,13 +257,12 @@
 </head>
 <body>
 
-  <header>
+<header>
     <div><a href="index.html" style="text-decoration:none;"><strong class="logo">HackatonDHL</strong></a></div>
     <nav>
-      <a href="index.html">Haga seguimiento</a>
-      <a href="#">Enviar</a>
-      <a href="#">Servicios de logística</a>
-      <a href="#">Servicio al cliente</a>
+      <a href="envio.html" style="font-weight: bold; text-decoration: underline;">Seguir envío (B2C)</a>
+      <a href="profile.html">Mi Perfil Eco</a>
+      <a href="simulacion.html">Panel de Impacto (B2B)</a>
     </nav>
     <a href="profile.html" class="header-profile">
       <span class="header-avatar">CM</span>
@@ -603,7 +602,6 @@
     }
 
     // ── Date cards ─────────────────────────────────────────────
-    // Usa ECO_OPCIONES.fechasPorUbicacion (campo "puntos", fecha ISO)
     function buildDateCards() {
       const container = document.getElementById('date-options');
       container.innerHTML = '';
@@ -642,7 +640,7 @@
       selOp   = op;
       selOp._fechaStr = formatFecha(op.fecha); // guarda la fecha formateada
 
-      // Ocultar desglose (no disponible en el formato actual del algoritmo)
+      // Ocultar desglose 
       document.getElementById('pts-breakdown').classList.remove('visible');
 
       // CO2 chip
